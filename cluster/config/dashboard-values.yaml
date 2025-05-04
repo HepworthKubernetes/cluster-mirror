@@ -1,0 +1,5 @@
+---
+kong:
+  enabled: true
+  env:
+    KONG_PROXY_LISTEN: "0.0.0.0:443 ssl"
