@@ -1,0 +1,5 @@
+---
+resources:
+  - admin-crb.yaml
+  - admin-sa.yaml
+  - admin-secret.yaml
