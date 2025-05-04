@@ -1,0 +1,15 @@
+---
+apiVersion: metallb.io/v1beta1
+kind: IPAddressPool
+metadata:
+  name: home-pool
+  namespace: metallb-system
+spec:
+  addresses:
+    - 10.0.3.200-10.0.3.220  # Adjust to an unused range on your home LAN
+---
+apiVersion: metallb.io/v1beta1
+kind: L2Advertisement
+metadata:
+  name: home-advert
+  namespace: metallb-system
