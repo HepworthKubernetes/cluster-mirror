@@ -37,7 +37,7 @@ spec:
             - name: REPO_URL
               value: "https://github.com/travishepworth/kubernetes"
             - name: LABELS
-              value: build,test
+              value: build,test,deploy
             - name: RUNNER_NAME_PREFIX
               value: epic-
             - name: RUNNER_NAME
