@@ -1,6 +1,8 @@
 FROM myoung34/github-runner:latest
 
-RUN export KUBECTL_VERSION=$(curl -s https://dl.k8s.io/release/stable.txt) && \
-    curl -LO https://dl.k8s.io/release/${KUBECTL_VERSION}/bin/linux/amd64/kubectl && \
+# Pin version explicitly for reliability
+ARG KUBECTL_VERSION=v1.29.3
+
+RUN curl -sSL -o kubectl "https://dl.k8s.io/release/${KUBECTL_VERSION}/bin/linux/amd64/kubectl" && \
     install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl && \
     rm kubectl
