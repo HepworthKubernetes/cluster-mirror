@@ -21,6 +21,8 @@ spec:
         - name: workdir
           hostPath:
             path: /tmp/github-runner-kubernetes
+      imagePullSecrets:
+        - name: ghcr-creds
       containers:
         - name: runner
           image: ghcr.io/travishepworth/kubernetes/github-runner:latest
