@@ -4,8 +4,6 @@ on:
   push:
     paths:
       - "images/github-runner/**"
-  workflow_dispatch:
-
 jobs:
   build:
     name: Build and Push Docker Image
