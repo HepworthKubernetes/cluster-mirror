@@ -1,0 +1,14 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: tmodloader
+  namespace: terraria
+spec:
+  selector:
+    app: tmodloader
+  ports:
+    - protocol: TCP
+      port: 7777
+      targetPort: 7777
+  type: LoadBalancer

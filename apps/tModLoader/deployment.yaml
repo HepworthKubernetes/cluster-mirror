@@ -1,0 +1,38 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: tmodloader
+  namespace: terraria
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: tmodloader
+  template:
+    metadata:
+      labels:
+        app: tmodloader
+    spec:
+      restartPolicy: Always
+      containers:
+        - name: tmodloader
+          image: jacobsmile/tmodloader1.4:latest
+          ports:
+            - containerPort: 7777
+          envFrom:
+            - configMapRef:
+                name: tmodloader-config
+          volumeMounts:
+            - name: storage
+              mountPath: /data
+            - name: config
+              mountPath: /config
+      volumes:
+        - name: config
+          configMap:
+            name: tmodloader-config
+        - name: storage
+          emptyDir: {}
+        #   persistentVolumeClaim:
+        #     claimName: tmodloader-pvc
