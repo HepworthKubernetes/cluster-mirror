@@ -23,7 +23,7 @@ spec:
             path: /tmp/github-runner-kubernetes
       containers:
         - name: runner
-          image: myoung34/github-runner:latest
+          image: ghcr.io/travishepworth/kubernetes/github-runner:latest
           env:
             - name: START_DOCKER_SERVICE
               value: "true"
