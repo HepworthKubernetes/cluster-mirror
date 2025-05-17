@@ -6,6 +6,7 @@ on:
       - main
     paths:
       - "apps/**"
+  workflow_dispatch:
 jobs:
   deploy:
     name: Apply Kubernetes Manifests
@@ -50,5 +51,5 @@ jobs:
         run: |
           while read -r dir; do
             echo "Applying kustomize in $dir"
-            kubectl apply -f $dir
+            kubectl apply -k $dir
           done < changed_dirs.txt
