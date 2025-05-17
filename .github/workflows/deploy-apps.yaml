@@ -1,13 +1,11 @@
 ---
 name: Deploy Application
-
 on:
   push:
     branches:
       - main
     paths:
-      - 'apps/**'
-
+      - "apps/**"
 jobs:
   deploy:
     name: Apply Kubernetes Manifests
@@ -16,21 +14,19 @@ jobs:
       contents: read
       id-token: write
       deployments: write
-      steps:
-        - name: Checkout
-          uses: actions/checkout@v3
-
-        - name: Get changes
-          id: changes
-          run: |
-            # Get changes files in /apps/
-            changed_dirs=$(git diff --name-only ${{ github.event.before }} ${{ github.sha }} | grep '^apps/' | awk -F/ '{print $1"/"$2}' | sort -u)
-            echo "Changed deployments: $changed_dirs"
-            echo "$changed_dirs" > changed_dirs.txt
-
-        - name: Apply
-          run: |
-            while read -r dir; do
-              echo "Applying kustomize in $dir"
-              kubectl apply -f $dir
-            done < changed_dirs.txt
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Get changes
+        id: changes
+        run: |
+          # Get changes files in /apps/
+          changed_dirs=$(git diff --name-only ${{ github.event.before }} ${{ github.sha }} | grep '^apps/' | awk -F/ '{print $1"/"$2}' | sort -u)
+          echo "Changed deployments: $changed_dirs"
+          echo "$changed_dirs" > changed_dirs.txt
+      - name: Apply
+        run: |
+          while read -r dir; do
+            echo "Applying kustomize in $dir"
+            kubectl apply -f $dir
+          done < changed_dirs.txt
