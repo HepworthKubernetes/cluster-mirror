@@ -1,0 +1,33 @@
+name: Build GitHub Runner
+
+on:
+  push:
+    paths:
+      - "images/github-runner/**"
+  workflow_dispatch:
+
+jobs:
+  build:
+    name: Build and Push Docker Image
+    runs-on: [deploy]
+  permissions:
+    contents: read
+    id-token: write
+    deployments: write
+  steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3
+
+    - name: Log in to GitHub Container Registry (GHCR)
+      run: echo "${{ secrets.REGISTRY_SECRET }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+
+    - name: Build Docker Image
+      run: |
+        IMAGE_NAME=ghcr.io/${{ github.repository }}/github-runner
+        docker build -t $IMAGE_NAME:latest -t $IMAGE_NAME:${{ github.sha }} images/github-runner
+
+    - name: Push Docker image
+      run: |
+        IMAGE_NAME=ghcr.io/${{ github.repository }}/github-runner
+        docker push $IMAGE_NAME:latest
+        docker push $IMAGE_NAME:${{ github.sha }}
