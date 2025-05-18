@@ -27,6 +27,7 @@ jobs:
         env:
           TOKEN: ${{ secrets.PUSH_MIRROR_TOKEN }}
         run: |
-          git remote set-url mirror https://x-access-token:${TOKEN}@github.com/travishepworth/kubernetes-public.git 2>/dev/null || \
+          echo "Token Length: ${#TOKEN}"
+          git remote remove mirror 2>/dev/null || true
           git remote add mirror https://x-access-token:${TOKEN}@github.com/travishepworth/kubernetes-public.git
           git push --force mirror HEAD:main
