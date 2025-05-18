@@ -33,5 +33,5 @@ jobs:
       - name: Mirror to Public
         run: |
           git remote remove mirror 2>/dev/null || true
-          git remote add mirror git@github.com/travishepworth/kubernetes-public.git
+          git remote add mirror git@github.com:travishepworth/kubernetes-public.git
           git push --force mirror HEAD:main
