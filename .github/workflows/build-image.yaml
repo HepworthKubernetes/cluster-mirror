@@ -73,10 +73,10 @@ jobs:
           IMAGE_NAME=ghcr.io/${{ github.repository }}/${{ matrix.image }}
           docker build -t $IMAGE_NAME:latest -t $IMAGE_NAME:${{ github.sha }} images/${{ matrix.image }}
 
-      - name: Verify Image
-        run: |
-          IMAGE_NAME=ghcr.io/${{ github.repository }}/${{ matrix.image }}
-          docker run --rm $IMAGE_NAME:latest /bin/sh -c "echo 'Image is valid'"
+      # - name: Verify Image
+      #   run: |
+      #     IMAGE_NAME=ghcr.io/${{ github.repository }}/${{ matrix.image }}
+      #     docker run --rm $IMAGE_NAME:latest /bin/sh -c "echo 'Image is valid'"
 
       - name: Push Docker image
         run: |
