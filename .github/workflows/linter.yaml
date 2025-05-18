@@ -28,8 +28,6 @@ jobs:
       - name: Run Linter
         run: |
           # Run the container
-          export WORKSPACE=${{ github.workspace }}
-          echo "Using workspace: ${GITHUB_WORKSPACE}"
           mkdir -p "$WORKSPACE"
           ctr run --rm \
             --mount type=bind,src=${{ github.workspace }},dst=/workspace,options=rbind:rw \
