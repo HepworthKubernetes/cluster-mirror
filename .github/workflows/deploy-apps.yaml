@@ -29,7 +29,7 @@ jobs:
           echo "Checking changed directories in /apps/"
           # Determine a valid diff base
           if git rev-parse ${{ github.event.before }} >/dev/null 2>&1; then
-            diff_base=${{ github.event.before }}
+            diff_base=$(git merge-base origin/main HEAD || echo HEAD^)
           else
             diff_base=HEAD^
           fi
