@@ -1,0 +1,31 @@
+---
+name: Mirror Repository
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  mirror:
+    name: Mirror to GitHub
+    runs-on: [git-ops]
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Setup Git
+        run: |
+          git config --global user.name "GitHub Actions"
+          git config --global user.email "actions@github.com"
+
+      - name: Mirror to Public
+        env:
+          TOKEN: ${{ secrets.REGISTRY_SECRET }}
+        run: |
+          git remote add mirror https://x-access-token:${TOKEN}@github.com/travishepworth/kubernetes-public.git
+          git push --force mirror HEAD:main
