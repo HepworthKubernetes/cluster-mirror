@@ -31,7 +31,7 @@ jobs:
             diff_base="HEAD^"
           fi
 
-          changed_dirs=$(git diff --name-only "$diff_base" "${{ github.sha }}" | grep '^images/' | awk -F/ '{print $1"/"$2}' | sort -u)
+          changed_dirs=$(git diff --name-only "$diff_base" "${{ github.sha }}" | grep '^images/[^/]\+/' | awk -F/ '{print $2}' | sort -u)
           if [ -z "$changed_dirs" ]; then
             echo "No images changed."
             echo "images=[]" >> "$GITHUB_OUTPUT"
