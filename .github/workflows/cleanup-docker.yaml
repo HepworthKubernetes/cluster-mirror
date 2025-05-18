@@ -1,0 +1,23 @@
+---
+name: Cleanup Docker
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '0 2 * * *'  # Every day at 2 AM UTC
+
+jobs:
+  prune-docker:
+    name: Prune Docker Images
+    runs-on: [git-ops]
+
+    steps:
+      - name: Show Docker Disk Usage (before)
+        run: docker system df
+
+      - name: Prune Docker Images
+        run: |
+          # Prune unused images, containers, and networks
+          docker system prune -a -f --volumes
+
+      - name: Show Docker Disk Usage (after)
+        run: docker system df
