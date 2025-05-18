@@ -9,4 +9,4 @@ cd /runner
            --unattended \
            --replace
 
-./run.sh
+exec ./run.sh
