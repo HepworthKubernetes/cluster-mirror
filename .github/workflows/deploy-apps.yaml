@@ -10,7 +10,7 @@ on:
 jobs:
   deploy:
     name: Apply Kubernetes Manifests
-    runs-on: [deploy]
+    runs-on: [build]
     permissions:
       contents: read
       id-token: write
