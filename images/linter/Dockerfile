@@ -9,7 +9,6 @@ RUN apk add --no-cache \
     python3 \
     py3-pip \
     py3-setuptools \
-    py3-wheel \
     py3-virtualenv \
     shellcheck \
     hadolint \
