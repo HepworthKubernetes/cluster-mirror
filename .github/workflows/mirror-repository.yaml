@@ -25,7 +25,7 @@ jobs:
 
       - name: Mirror to Public
         env:
-          TOKEN: ${{ secrets.REGISTRY_SECRET }}
+          TOKEN: ${{ secrets.PUSH_MIRROR_TOKEN }}
         run: |
           git remote set-url mirror https://x-access-token:${TOKEN}@github.com/travishepworth/kubernetes-public.git 2>/dev/null || \
           git remote add mirror https://x-access-token:${TOKEN}@github.com/travishepworth/kubernetes-public.git
