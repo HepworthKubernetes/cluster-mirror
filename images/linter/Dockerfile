@@ -1,7 +1,9 @@
 FROM alpine:3.19
 
+RUN echo "https://dl-cdn.alpinelinux.org/alpine/edge/testing" >> /etc/apk/repositories
+
 # Install base tools and linters
-RUN apk add --no-cache \
+RUN apk update && apk add --no-cache \
     bash \
     git \
     curl \
@@ -9,7 +11,6 @@ RUN apk add --no-cache \
     python3 \
     py3-pip \
     shellcheck \
-    hadolint \
     yamllint \
     kubeconform
 
