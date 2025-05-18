@@ -11,13 +11,7 @@ jobs:
     runs-on: [git-ops]
 
     steps:
-      - name: Show Docker Disk Usage (before)
-        run: docker system df
-
       - name: Prune Docker Images
         run: |
           # Prune unused images, containers, and networks
           docker system prune -a -f --volumes
-
-      - name: Show Docker Disk Usage (after)
-        run: docker system df
