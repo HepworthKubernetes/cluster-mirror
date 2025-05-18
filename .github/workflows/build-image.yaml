@@ -39,7 +39,7 @@ jobs:
           fi
 
           echo "Changed directories: $changed_dirs"
-          matrix=$(printf '%s\n' $changed_dirs | jq -Rc '[inputs]')
+          matrix=$(printf '%s\n' $changed_dirs[@] | jq -Rc '[inputs]')
           echo "Changed images: $matrix"
           echo "images=$matrix" >> "$GITHUB_OUTPUT"
 
