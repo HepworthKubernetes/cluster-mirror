@@ -23,11 +23,17 @@ jobs:
 
       - name: Run Linter
         run: |
-          docker run --rm -v $(pwd):/workspace ghcr.io/travishepworth/kubernetes/linter:ee137a94bd0098eec1b97bf71d5692370295243e /bin/bash -c "
-            echo 'Running shellcheck...' &&
-            find . -type f -name '*.sh' -exec shellcheck {} + || true &&
-            echo 'Running yamllint...' &&
-            find . -type f -name '*.yaml' -name '*.yml' -exec yamllint {} + || true &&
-            echo 'Running kubeconform...' &&
-            find . -type f -name '*.yaml' -name '*.yml' -exec kubeconform -strict {} + || true
-          "
+          # Pull the image
+          ctr image pull --user "${{ github.actor }}:${{ secrets.REGISTRY_SECRET }}" ghcr.io/travishepworth/kubernetes/linter:ee137a94bd0098eec1b97bf71d5692370295243e
+          # Run the container
+          ctr run --rm \
+            --mount type=bind,src=$(pwd),dst=/workspace,options=rbind:rw \
+            ghcr.io/travishepworth/kubernetes/linter:ee137a94bd0098eec1b97bf71d5692370295243e linter \
+            /bin/bash -c "
+              echo 'Running shellcheck...' &&
+              find . -type f -name '*.sh' -exec shellcheck {} + || true &&
+              echo 'Running yamllint...' &&
+              find . -type f \( -name '*.yaml' -o -name '*.yml' \) -exec yamllint {} + || true &&
+              echo 'Running kubeconform...' &&
+              find . -type f \( -name '*.yaml' -o -name '*.yml' \) -exec kubeconform -strict {} + || true
+            "
