@@ -1,0 +1,43 @@
+---
+PRINT_ALL_FILES: false
+
+# Linters to disable
+# These often find false positives in the CI/CD pipeline
+# or do not provide sufficent value to the project
+DISABLE_LINTERS:
+  - SPELL_CSPELL
+  - YAML_PRETTIER
+  - REPOSITORY_SEMGREP
+  - REPOSITORY_TRIVY
+  - REPOSITORY_CHECKOV
+  - API_SPECTRAL
+  - COPYPASTE_JSCPD
+  - JSON_JSONLINT  # jsonlint enforces strict json, which flags comments | potentially switch to jsonc
+  - MARKDOWN_MARKDOWNLINT
+  - MARKDOWN_MARKDOWN_LINK_CHECK
+  - SPELL_LYCHEE  # file paths are causing this to fail
+  - REPOSITORY_GRYPE  # many critical packages, may need to update eventually
+REPOSITORY_SECRETLINT_DISABLE_ERRORS: true
+REPOSITORY_GITLEAKS_DISABLE_ERRORS: true
+SPELL_MISSPELL_DISABLE_ERRORS: false
+PARALLEL: true
+MARKDOWN_MARKDOWNLINT_DISABLE_ERRORS: false
+REPOSITORY_CHECKOV_DISABLE_ERRORS: true
+PRINT_ALPACA: false
+BASH_SHELLCHECK_ARGUMENTS: "-e SC2015"
+
+# Commands to run before linting to change HOME
+PRE_COMMANDS:
+  - command: export HOME=/builds
+    cwd: "root"
+
+# Commands to run after linting to return to the original HOME
+POST_COMMANDS:
+  - command: export HOME=/
+    cwd: "root"
+
+# Linters configuration files
+SPELL_LYCHEE_CONFIG_FILE: "linting-config/lychee.toml"
+YAML_YAMLLINT_CONFIG_FILE: "linting-config/yamllint.yaml"
+MARKDOWN_MARKDOWN_LINK_CHECK_CONFIG_FILE: "linting-config/markdown-link-check-config.json"
+REPOSITORY_GRYPE_CONFIG_FILE: "linting-config/grype.yaml"
