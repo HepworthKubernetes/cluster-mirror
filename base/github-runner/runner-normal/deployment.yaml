@@ -61,3 +61,10 @@ spec:
             requests:
               cpu: 2
               memory: 256Mi
+          lifecylce:
+            postStart:
+              exec:
+                command:
+                  - /bin/sh
+                  - -c
+                  - docker pull ghcr.io/oxsecurity/megalinter:v7.13.0
