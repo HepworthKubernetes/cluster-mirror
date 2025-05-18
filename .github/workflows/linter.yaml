@@ -33,7 +33,7 @@ jobs:
           docker run --rm \
             -v "${GITHUB_WORKSPACE}:/workspace:rw" \
             ghcr.io/travishepworth/kubernetes/linter:latest \
-            /bin/sh -c "
+            -c "
               cd /workspace &&
               echo 'Running shellcheck...' &&
               find . -type f -name '*.sh' -exec shellcheck {} + || true &&
