@@ -28,6 +28,7 @@ jobs:
       - name: Run Linter
         run: |
           # Run the container
+          mkdir -p /tmp/github-runner-kubernetes
           ctr run --rm \
             --mount type=bind,src=${{ github.workspace }},dst=/workspace,options=rbind:rw \
             ghcr.io/travishepworth/kubernetes/linter:latest linter \
