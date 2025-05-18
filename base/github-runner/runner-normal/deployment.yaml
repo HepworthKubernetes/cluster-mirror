@@ -2,18 +2,19 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: github-runner
+  name: gh-runner
   namespace: github-runners
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: github-runner
+      app: gh-runner
   template:
     metadata:
       labels:
-        app: github-runner
+        app: gh-runner
     spec:
+      serviceAccountName: gh-runner-sa
       volumes:
         - name: containerdsock
           hostPath:
@@ -21,11 +22,9 @@ spec:
         - name: workdir
           hostPath:
             path: /tmp/github-runner-kubernetes
-      imagePullSecrets:
-        - name: ghcr-creds
       containers:
         - name: runner
-          image: ghcr.io/travishepworth/kubernetes/github-runner:latest
+          image: myoung34/github-runner:latest
           env:
             - name: START_DOCKER_SERVICE
               value: "true"
@@ -39,7 +38,7 @@ spec:
             - name: REPO_URL
               value: "https://github.com/travishepworth/kubernetes"
             - name: LABELS
-              value: build,test,deploy
+              value: build,test,lint,git-ops
             - name: RUNNER_NAME_PREFIX
               value: epic-
             - name: RUNNER_NAME
