@@ -9,4 +9,6 @@ cd /runner
            --unattended \
            --replace
 
+echo "[DEBUG] Arguments: $@"
+
 exec ./run.sh
