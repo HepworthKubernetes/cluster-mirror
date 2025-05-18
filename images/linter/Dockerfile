@@ -8,7 +8,6 @@ RUN apk add --no-cache \
     jq \
     python3 \
     py3-pip \
-    py3-setuptools \
     py3-virtualenv \
     shellcheck \
     hadolint \
