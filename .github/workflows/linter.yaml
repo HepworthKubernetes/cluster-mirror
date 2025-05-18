@@ -5,7 +5,7 @@ on:
   workflow_dispatch:
 jobs:
   lint:
-    name: MegaLinter
+    name: Lint
     runs-on: [lint]
 
     steps:
@@ -18,7 +18,8 @@ jobs:
         uses: docker/login-action@v2
         with:
           registry: ghcr.io
-          token: ${{ secrets.REGISTRY_SECRET }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.REGISTRY_SECRET }}
 
       - name: Run Linter
         run: |
