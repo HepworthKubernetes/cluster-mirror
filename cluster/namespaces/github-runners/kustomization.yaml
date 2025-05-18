@@ -1,4 +1,4 @@
 ---
 resources:
   - namespace.yaml
-  - ../../rbac/github-runner/serviceaccount.yaml
+  - ./rbac

@@ -1,0 +1,17 @@
+---  # This file is included in namespaces managed by github actions.
+# It allows deploying with kustomize to the kluster. It uses a custom
+# Docker image with kubectl. The runner bound to the other service
+# account will not have access to the cluster and will not have
+# kubectl installed.
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: github-runner-edit
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: edit
+subjects:
+  - kind: ServiceAccount
+    name: gh-runner-deploy-sa
+    namespace: github-runners

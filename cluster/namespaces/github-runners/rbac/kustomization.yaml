@@ -1,0 +1,5 @@
+---
+resources:
+  - runner-rb.yaml
+  - runner-sa.yaml
+  - deploy-sa.yaml
