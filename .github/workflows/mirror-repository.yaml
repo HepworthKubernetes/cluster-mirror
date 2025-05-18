@@ -21,6 +21,7 @@ jobs:
   configure-ssh:
     name: Configure SSH
     runs-on: [git-ops]
+    needs: checkout
 
     steps:
       - name: Configure SSH
@@ -33,6 +34,7 @@ jobs:
   configure-git:
     name: Configure Git
     runs-on: [git-ops]
+    needs: checkout
 
     steps:
       - name: Configure Git
@@ -43,6 +45,7 @@ jobs:
   mirror:
     name: Mirror to Public
     runs-on: [git-ops]
+    needs: [configure-ssh, configure-git]
 
     steps:
       - name: Mirror to Public
