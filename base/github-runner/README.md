@@ -1,40 +1,49 @@
-# Creating and deploying the github runners
+# Creating and Deploying GitHub Runners
 
-## Access Token
+## Access Tokens
 
-The deployment for the runner requires `ACCESS_TOKEN` to be set as a secret in namespace `github-runners`.
+The deployment requires an `ACCESS_TOKEN` to be set as a secret in the `github-runners` namespace.
 
-Create a personal access token with these scopes:
-- `repo (all)`
+### Required scopes for the runner:
+
+- `repo` (all)
 - `workflow`
-- `admin:repo_hook - read:repo_hook`
-- `admin:public_key - read:public_key`
+- `admin:repo_hook`, `read:repo_hook`
+- `admin:public_key`, `read:public_key`
 - `admin:org_hook`
 - `notifications`
 
-Copy to the clipboard(wayland) and add the secret to the namespace `github-runners`:
+Add the token to the cluster:
+
 ```bash
-kubectl create secret generic github-runner \                                                  
+kubectl create secret generic github-runner \
     --from-literal=ACCESS_TOKEN=$(wl-paste) \
     -n github-runners
 ```
 
-For the image, the dockerfile must also have an access token
-- `repo (all)`
+### Required scopes for the Dockerfile build:
+
+- `repo` (all)
 - `read:packages`
 - `write:packages`
+
+Add the token for the image pull:
+
 ```bash
 kubectl create secret docker-registry ghcr-creds \
---docker-server=ghcr.io \
---docker-username=travishepworth \
---docker-password=$(wl-paste) \
--n github-runners
+    --docker-server=ghcr.io \
+    --docker-username=travishepworth \
+    --docker-password=$(wl-paste) \
+    -n github-runners
 ```
 
-## Deploying the runners
-On a new cluster, or if the runners get deleted, they require a jumpstart by hand.
-Take this filesystem:
-```bash
+## Deploying the Runners
+
+On a new cluster, or if the runners get deleted, they need a manual jumpstart.
+
+### Project Structure
+
+```
 ├── base
 │   └── github-runner
 │       ├── deployment.yaml
@@ -61,54 +70,57 @@ Take this filesystem:
 │       └── Dockerfile
 └── README.md
 ```
-First, create the namespace:
+
+### 1. Create the namespace and RBAC
+
 ```bash
-kubectl apply -k cluster/namespaces/github-runners  
-    namespace/github-runners created
-    serviceaccount/gh-runner-deploy-sa created
-    serviceaccount/gh-runner-sa created
-    rolebinding.rbac.authorization.k8s.io/runner-rb configured
+kubectl apply -k cluster/namespaces/github-runners
 ```
-The following are created:
+
+This creates:
+
 - `github-runners` namespace
-- `gh-runner-deploy-sa` service account for deploy runner (kubectl)
-- `gh-runner-sa` service account for the runner
-- `runner-rb` role binding for the runner service account
+- `gh-runner-deploy-sa` (privileged deploy service account)
+- `gh-runner-sa` (standard service account)
+- `runner-rb` role binding for the `gh-runner-sa`
 
-We want runner deploy to have elevated permissions, and a normal runner for non cluster tasks.
+The deploy runner gets elevated permissions; the normal runner is sandboxed for non-cluster tasks.
 
-Second, deploy the runner(s):
+### 2. Deploy the runners
+
 ```bash
-# Note: this requires a docker registry for controlling kubectl
-# TODO: Create said dockumentation and link it
 kubectl apply -k base/github-runner/runner-deploy
-    deployment.apps/gh-runner-deploy created
-kubectl apply -k base/github-runner/runner-normal               
-    deployment.apps/gh-runner created
+# deployment.apps/gh-runner-deploy created
+
+kubectl apply -k base/github-runner/runner-normal
+# deployment.apps/gh-runner created
 ```
 
-Third, create a namespace
+Note: this assumes the required Docker registry is available for the deployment container (which needs `kubectl`).  
+TODO: Document the image build and link it here.
+
+### 3. Create the target namespace (e.g., for workloads)
+
 ```bash
-kubectl apply -k cluster/namespaces/terraria      
-    namespace/terraria unchanged
-    rolebinding.rbac.authorization.k8s.io/github-runner-edit configured
+kubectl apply -k cluster/namespaces/terraria
 ```
 
-This is important because the rolebinding for the deploy service account needs permissions to manage the namespace, the normal runner does not.
+This ensures the deploy runner has access, while the normal runner does not. The role binding is scoped accordingly.
 
-This leaves you with:
+### Access Verification
+
 ```bash
 kubectl auth can-i create deployment \
-  --as=system:serviceaccount:github-runners:gh-runner-sa \ 
+  --as=system:serviceaccount:github-runners:gh-runner-sa \
   --namespace=terraria
-
-no
+# no
 
 kubectl auth can-i create deployment \
   --as=system:serviceaccount:github-runners:gh-runner-deploy-sa \
   --namespace=terraria
-
-yes
+# yes
 ```
 
-Configure the tags in a way so you can use both of them where they are needed.
+## Notes
+
+Configure runner tags carefully so jobs are dispatched appropriately to deploy vs. normal runners. Use tags in your GitHub Actions workflows to target the right type of runner based on access needs and permissions.
