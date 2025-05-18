@@ -16,4 +16,4 @@ RUN apk update && apk add --no-cache \
     yamllint \
     kubeconform
 
-ENTRYPOINT ["/bin/bash"]
+ENTRYPOINT ["/bin/sh"]
