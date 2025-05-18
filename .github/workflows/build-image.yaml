@@ -23,7 +23,15 @@ jobs:
       - name: Get changed image directories
         id: set-matrix
         run: |
-          changed_dirs=$(git diff --name-only origin/main...HEAD | grep '^images/[^/]\+/[^/]' | awk -F/ '{print $2}' | sort -u)
+
+          # Use GitHub context correctly
+          if git rev-parse "${{ github.event.before }}" >/dev/null 2>&1; then
+            diff_base="${{ github.event.before }}"
+          else
+            diff_base="HEAD^"
+          fi
+
+          changed_dirs=$(git diff --name-only "$diff_base" "${{ github.sha }}" | grep '^images/' | awk -F/ '{print $1"/"$2}' | sort -u)
           if [ -z "$changed_dirs" ]; then
             echo "No images changed."
             echo "images=[]" >> "$GITHUB_OUTPUT"
