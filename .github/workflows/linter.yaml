@@ -21,7 +21,7 @@ jobs:
           token: ${{ secrets.REGISTRY_SECRET }}
 
       - name: Run Linter
-        uses: |
+        run: |
           docker run --rm -v $(pwd):/workspace ghcr.io/travishepworth/kubernetes/linter:ee137a94bd0098eec1b97bf71d5692370295243e /bin/bash -c "
             echo 'Running shellcheck...' &&
             find . -type f -name '*.sh' -exec shellcheck {} + || true &&
