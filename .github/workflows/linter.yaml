@@ -28,7 +28,7 @@ jobs:
 
       - name: Run Linter
         run: |
-          # Run the container
+          # Run the container to lint
           echo "Running linter..."
           docker run --rm \
             -v "${GITHUB_WORKSPACE}:/workspace:rw" \
