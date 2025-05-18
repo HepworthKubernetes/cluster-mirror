@@ -16,4 +16,5 @@ RUN apk update && apk add --no-cache \
     yamllint \
     kubeconform
 
+RUN ls -l /bin # Workaround for buildkit
 ENTRYPOINT ["/bin/sh"]
