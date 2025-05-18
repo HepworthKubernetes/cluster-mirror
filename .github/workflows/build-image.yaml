@@ -1,0 +1,61 @@
+name: Build Images
+
+on:
+  push:
+    paths:
+      - "images/**"
+  workflow_dispatch:
+
+jobs:
+  detect-changes:
+    name: Detect changed images
+    runs-on: [build]
+    outputs:
+      images: ${{ steps.set-matrix.outputs.images }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Get changed image directories
+        id: set-matrix
+        run: |
+          changed_dirs=$(git diff --name-only origin/main...HEAD | grep '^images/' | awk -F/ '{print $2}' | sort -u)
+          if [ -z "$changed_dirs" ]; then
+            echo "No images changed."
+            echo "images=[]" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          matrix=$(printf '%s\n' $changed_dirs | jq -R . | jq -s .)
+          echo "Changed images: $matrix"
+          echo "images=$matrix" >> "$GITHUB_OUTPUT"
+
+  build-and-push:
+    name: Build and Push Docker Image
+    needs: detect-changes
+    runs-on: [build]
+    if: ${{ needs.detect-changes.outputs.images != '[]' }}
+    strategy:
+      matrix:
+        image: ${{ fromJson(needs.detect-changes.outputs.images) }}
+    permissions:
+      contents: read
+      id-token: write
+      deployments: write
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Log in to GitHub Container Registry (GHCR)
+        run: echo "${{ secrets.REGISTRY_SECRET }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+
+      - name: Build Docker Image
+        run: |
+          IMAGE_NAME=ghcr.io/${{ github.repository }}/${{ matrix.image }}
+          docker build -t $IMAGE_NAME:latest -t $IMAGE_NAME:${{ github.sha }} images/${{ matrix.image }}
+
+      - name: Push Docker image
+        run: |
+          IMAGE_NAME=ghcr.io/${{ github.repository }}/${{ matrix.image }}
+          docker push $IMAGE_NAME:latest
+          docker push $IMAGE_NAME:${{ github.sha }}
