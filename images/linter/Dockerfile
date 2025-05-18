@@ -1,5 +1,4 @@
 FROM alpine:3.19
-
 # Install base tools and linters
 RUN apk add --no-cache \
     bash \
