@@ -1,5 +1,7 @@
 FROM alpine:3.19
 
+LABEL org.opencontainers.image.source https://github.com/travishepworth/kubernetes
+
 RUN echo "https://dl-cdn.alpinelinux.org/alpine/edge/testing" >> /etc/apk/repositories
 
 # Install base tools and linters
