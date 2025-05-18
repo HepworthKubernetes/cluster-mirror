@@ -29,12 +29,13 @@ jobs:
         run: |
           # Run the container
           export WORKSPACE=${{ github.workspace }}
-          echo "Using workspace: $WORKSPACE"
+          echo "Using workspace: ${GITHUB_WORKSPACE}"
           mkdir -p "$WORKSPACE"
           ctr run --rm \
             --mount type=bind,src=${{ github.workspace }},dst=/workspace,options=rbind:rw \
             ghcr.io/travishepworth/kubernetes/linter:latest linter \
             /bin/bash -c "
+              cd /workspace &&
               echo 'Running shellcheck...' &&
               find . -type f -name '*.sh' -exec shellcheck {} + || true &&
               echo 'Running yamllint...' &&
