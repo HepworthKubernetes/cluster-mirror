@@ -42,3 +42,4 @@ jobs:
               echo 'Running kubeconform...' &&
               find . -type f \( -name '*.yaml' -o -name '*.yml' \) -exec kubeconform -strict {} + || true
             "
+        shell: bash
