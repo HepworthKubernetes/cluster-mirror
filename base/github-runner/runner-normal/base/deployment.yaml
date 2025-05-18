@@ -20,7 +20,11 @@ spec:
             path: /run/containerd/containerd.sock
         - name: workdir
           hostPath:
-            path: /tmp/github-runner-kubernetes
+            path: /actions-runner/_work
+        - name: hosttmp
+          hostPath:
+            path: /tmp
+            type: Directory
       containers:
         - name: runner
           image: myoung34/github-runner:latest
@@ -45,12 +49,14 @@ spec:
                 fieldRef:
                   fieldPath: metadata.name
             - name: RUNNER_WORKDIR
-              value: /tmp/github-runner-kubernetes
+              value: /actions-runner/_work
           volumeMounts:
             - name: containerdsock
               mountPath: /run/containerd/containerd.sock
             - name: workdir
-              mountPath: /tmp/github-runner-kubernetes
+              mountPath: /actions-runner/_work
+            - name: hosttmp
+              mountPath: /tmp
           securityContext:
             privileged: true  # Required if you're enabling docker
           resources:
