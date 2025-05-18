@@ -14,21 +14,23 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Log in to GitHub Container Registry
-        uses: docker/login-action@v2
-        with:
-          registry: ghcr.io
-          username: ${{ github.actor }}
-          password: ${{ secrets.REGISTRY_SECRET }}
+      - Name: Pull Image
+        run: |
+          IMAGE="ghcr.io/travishepworth/kubernetes/linter:latest"
+          # Check if image exists locally
+          if ! ctr image ls -q | grep -q "$IMAGE"; then
+            echo "Image not found locally, pulling..."
+            ctr image pull --user "${{ github.actor }}:${{ secrets.REGISTRY_SECRET }}" "$IMAGE"
+          else
+            echo "Image found locally, using cached version."
+          fi
 
       - name: Run Linter
         run: |
-          # Pull the image
-          ctr image pull --user "${{ github.actor }}:${{ secrets.REGISTRY_SECRET }}" ghcr.io/travishepworth/kubernetes/linter:ee137a94bd0098eec1b97bf71d5692370295243e
           # Run the container
           ctr run --rm \
             --mount type=bind,src=$(pwd),dst=/workspace,options=rbind:rw \
-            ghcr.io/travishepworth/kubernetes/linter:ee137a94bd0098eec1b97bf71d5692370295243e linter \
+            ghcr.io/travishepworth/kubernetes/linter:latest linter \
             /bin/bash -c "
               echo 'Running shellcheck...' &&
               find . -type f -name '*.sh' -exec shellcheck {} + || true &&
