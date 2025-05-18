@@ -26,16 +26,18 @@ jobs:
       - name: Get changes
         id: changes
         run: |
+
           echo "Checking changed directories in /apps/"
-          # Determine a valid diff base
-          if git rev-parse ${{ github.event.before }} >/dev/null 2>&1; then
-            diff_base=$(git merge-base origin/main HEAD || echo HEAD^)
+
+          # Use GitHub context correctly
+          if git rev-parse "${{ github.event.before }}" >/dev/null 2>&1; then
+            diff_base="${{ github.event.before }}"
           else
-            diff_base=HEAD^
+            diff_base="HEAD^"
           fi
 
-          # Get unique changed /apps/<subdir> paths
-          changed_dirs=$(git diff --name-only "$diff_base" ${{ github.sha }} | grep '^apps/' | awk -F/ '{print $1"/"$2}' | sort -u)
+          echo "Diff base is $diff_base"
+          changed_dirs=$(git diff --name-only "$diff_base" "${{ github.sha }}" | grep '^apps/' | awk -F/ '{print $1"/"$2}' | sort -u)
 
           if [ -z "$changed_dirs" ]; then
             echo "No changes in /apps/, exiting."
