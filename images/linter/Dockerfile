@@ -13,5 +13,4 @@ RUN apk add --no-cache \
     yamllint \
     kubeconform
 
-
 ENTRYPOINT ["/bin/bash"]
