@@ -1,0 +1,6 @@
+---
+namespace: developer
+resources:
+  - namespace.yaml
+  - ../../rbac/github-runner
+  - ../../rbac/developer
