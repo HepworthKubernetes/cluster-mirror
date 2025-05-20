@@ -33,6 +33,5 @@ spec:
           configMap:
             name: tmodloader-config
         - name: storage
-          emptyDir: {}
-        #   persistentVolumeClaim:
-        #     claimName: tmodloader-pvc
+          persistentVolumeClaim:
+            claimName: tmodloader-pvc
