@@ -1,0 +1,6 @@
+---
+namespace: swagger-editor
+resources:
+  - namespace.yaml
+  - ../../rbac/github-runner
+  - ../../rbac/developer
