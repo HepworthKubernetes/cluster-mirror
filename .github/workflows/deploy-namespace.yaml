@@ -27,7 +27,7 @@ jobs:
         id: changes
         run: |
 
-          echo "Checking changed directories in /cluster/namespaces"
+          echo "Checking changed directories in /namespaces"
 
           # Use GitHub context correctly
           if git rev-parse "${{ github.event.before }}" >/dev/null 2>&1; then
@@ -37,10 +37,10 @@ jobs:
           fi
 
           echo "Diff base is $diff_base"
-          changed_dirs=$(git diff --name-only "$diff_base" "${{ github.sha }}" | grep '^cluster/namespaces' | awk -F/ '{print $1"/"$2}' | sort -u)
+          changed_dirs=$(git diff --name-only "$diff_base" "${{ github.sha }}" | grep '^namespaces' | awk -F/ '{print $1"/"$2}' | sort -u)
 
           if [ -z "$changed_dirs" ]; then
-            echo "No changes in /cluster/namespaces, exiting."
+            echo "No changes in /namespaces, exiting."
             echo "changed=false" >> "$GITHUB_OUTPUT"
             exit 0
           fi
