@@ -4,4 +4,4 @@ kind: Kustomization
 
 resources:
   - cert-manager.yaml
-  - cluster-issuers/
+  # - cluster-issuers/
