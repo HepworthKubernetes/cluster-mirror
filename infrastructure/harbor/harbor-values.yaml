@@ -1,0 +1,99 @@
+# harbor-values.yaml - LoadBalancer approach with TLS
+expose:
+  type: loadBalancer
+  loadBalancer:
+    name: harbor
+    IP: ""  # Let MetalLB assign an IP
+    ports:
+      httpPort: 80
+      httpsPort: 443
+    annotations:
+      metallb.universe.tf/allow-shared-ip: harbor
+    sourceRanges: []
+  tls:
+    enabled: true
+    certSource: auto
+    auto:
+      commonName: "core.harbor.batk.me"
+
+# External URL should match how you'll access it
+externalURL: https://core.harbor.batk.me
+
+# Persistence using Longhorn
+persistence:
+  enabled: true
+  resourcePolicy: "keep"
+  persistentVolumeClaim:
+    registry:
+      storageClass: "longhorn"
+      size: 50Gi
+    chartmuseum:
+      storageClass: "longhorn"
+      size: 5Gi
+    jobservice:
+      storageClass: "longhorn"
+      size: 5Gi
+    database:
+      storageClass: "longhorn"
+      size: 5Gi
+    redis:
+      storageClass: "longhorn"
+      size: 5Gi
+    trivy:
+      storageClass: "longhorn"
+      size: 5Gi
+
+# Use existing secret for Harbor admin password
+existingSecretAdminPassword: "harbor-admin-secret"
+existingSecretAdminPasswordKey: "password"
+
+# Core configuration
+core:
+  replicas: 1
+  existingSecret: "harbor-core-secret"
+  existingSecretKey: "secret"
+
+# JobService configuration
+jobservice:
+  replicas: 1
+  existingSecret: "harbor-jobservice-secret"
+  existingSecretKey: "secret"
+
+# Registry configuration
+registry:
+  replicas: 1
+  existingSecret: "harbor-registry-secret"
+  existingSecretKey: "secret"
+
+# ChartMuseum (Helm chart repository)
+chartmuseum:
+  enabled: true
+
+# Trivy (vulnerability scanner)
+trivy:
+  enabled: true
+
+# Notary (content trust)
+notary:
+  enabled: false
+
+# Database (PostgreSQL) - Use existing secret
+database:
+  type: internal
+  internal:
+    existingSecret: "harbor-database-secret"
+    existingSecretPasswordKey: "password"
+
+# Redis - Use existing secret
+redis:
+  type: internal
+  existingSecret: "harbor-redis-secret"
+  existingSecretPasswordKey: "password"
+
+# Metrics
+metrics:
+  enabled: true
+
+# TLS Configuration
+internalTLS:
+  enabled: false
