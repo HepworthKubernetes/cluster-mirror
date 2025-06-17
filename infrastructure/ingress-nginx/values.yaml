@@ -1,0 +1,61 @@
+# ingress-nginx Helm values.yaml
+controller:
+  # Configure the service as LoadBalancer (equivalent to your service patch)
+  service:
+    type: LoadBalancer
+    # Uncomment and configure these if you need specific LoadBalancer settings
+    # annotations: {}
+    # loadBalancerIP: ""
+    # loadBalancerSourceRanges: []
+
+  # ConfigMap data (equivalent to your ConfigMap patch)
+  config:
+    # Basic rate limiting
+    rate-limit-rpm: "1200"
+    rate-limit-connections: "20"
+
+    # Custom nginx config for more granular control
+    http-snippet: |
+      # Define rate limit zones
+      limit_req_zone $binary_remote_addr zone=login:10m rate=10r/m;
+      limit_req_zone $binary_remote_addr zone=git:10m rate=100r/m;
+      limit_req_zone $binary_remote_addr zone=global:10m rate=300r/m;
+
+    server-snippet: |
+      # Global rate limiting
+      limit_req zone=global burst=50 nodelay;
+      # Strict limits for authentication
+      location ~* /user/(login|sign_up) {
+        limit_req zone=login burst=10 nodelay;
+        limit_req_status 429;
+      }
+      # Git operations rate limiting
+      location ~* \.(git|hg)/ {
+        limit_req zone=git burst=20 nodelay;
+        limit_req_status 429;
+      }
+
+# Optional: Additional common configurations you might want
+# Uncomment and modify as needed
+
+# Default backend (optional)
+# defaultBackend:
+#   enabled: true
+
+# Metrics (optional)
+metrics:
+  enabled: true
+
+# Pod disruption budget (optional)
+# podDisruptionBudget:
+#   enabled: true
+#   minAvailable: 1
+
+# Resource limits (recommended for production)
+resources:
+  limits:
+    cpu: 500m
+    memory: 512Mi
+  requests:
+    cpu: 100m
+    memory: 128Mi
