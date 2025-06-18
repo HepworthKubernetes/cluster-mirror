@@ -3,6 +3,8 @@ controller:
   # Configure the service as LoadBalancer (equivalent to your service patch)
   service:
     type: LoadBalancer
+  admissionWebhooks:
+    enabled: false
     # Uncomment and configure these if you need specific LoadBalancer settings
     # annotations: {}
     # loadBalancerIP: ""
@@ -24,16 +26,13 @@ controller:
     server-snippet: |
       # Global rate limiting
       limit_req zone=global burst=50 nodelay;
-      # Strict limits for authentication
-      location ~* /user/(login|sign_up) {
-        limit_req zone=login burst=10 nodelay;
-        limit_req_status 429;
-      }
+
       # Git operations rate limiting
       location ~* \.(git|hg)/ {
         limit_req zone=git burst=20 nodelay;
         limit_req_status 429;
       }
+
 
 # Optional: Additional common configurations you might want
 # Uncomment and modify as needed
