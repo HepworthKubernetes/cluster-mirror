@@ -1,0 +1,13 @@
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+matadata:
+  name: forgejo-runner-rb
+subjects:
+  - kind: ServiceAccount
+    name: forgejo-runner-sa
+    namespace: forgejo-runners
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: forgejo-runner-cr
