@@ -1,6 +1,0 @@
----
-resources:
-  - developer-rb.yaml
-  - developer-sa.yaml
-  - developer-crb.yaml
-  - developer-cr.yaml
