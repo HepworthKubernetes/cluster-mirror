@@ -1,5 +1,0 @@
----
-resources:
-  - namespace.yaml
-  - ./rbac
-  - ../../rbac/github-runner/cluster-rolebinding

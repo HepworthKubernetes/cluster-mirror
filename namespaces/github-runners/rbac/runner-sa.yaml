@@ -1,6 +1,0 @@
----
-apiVersion: v1
-kind: ServiceAccount
-metadata:
-  name: gh-runner-sa  # for actions that don't require kustomize, no ckuster permissions
-  namespace: github-runners
