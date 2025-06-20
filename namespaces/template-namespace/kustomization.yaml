@@ -4,4 +4,4 @@ kind: Kustomization
 namespace: <namespace>  # rbac inherits this
 resources:
   - namespace.yaml
-  - rbac
+  # - rbac
