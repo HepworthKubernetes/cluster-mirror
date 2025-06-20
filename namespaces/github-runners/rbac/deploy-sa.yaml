@@ -1,6 +1,0 @@
----
-apiVersion: v1
-kind: ServiceAccount
-metadata:
-  name: gh-runner-deploy-sa  # Deploy kustomize files, more permissions
-  namespace: github-runners

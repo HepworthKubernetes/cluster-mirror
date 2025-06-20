@@ -1,6 +1,7 @@
 ---
-namespace: swagger-editor
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+namespace: swagger-editor  # rbac inherits this
 resources:
   - namespace.yaml
-  - ../../rbac/github-runner
-  - ../../rbac/developer
+  - rbac

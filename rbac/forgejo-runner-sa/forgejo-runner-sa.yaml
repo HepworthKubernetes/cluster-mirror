@@ -1,0 +1,6 @@
+# ci-system/runner-serviceaccount.yaml
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: forgejo-runner-sa
+  namespace: forgejo-runners
