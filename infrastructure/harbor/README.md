@@ -21,7 +21,7 @@ helm repo add harbor https://helm.goharbor.io
 helm repo update
 
 # Install Harbor
-helm install harbor harbor/harbor \
+helm upgrade --install harbor harbor/harbor \
   --namespace harbor \
   --values harbor-values.yaml \
   --version 1.13.0

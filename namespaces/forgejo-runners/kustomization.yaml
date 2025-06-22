@@ -4,4 +4,4 @@ kind: Kustomization
 namespace: forgejo-runners  # rbac inherits this
 resources:
   - namespace.yaml
-  # - rbac
+  - rbac

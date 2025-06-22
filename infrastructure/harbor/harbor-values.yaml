@@ -1,23 +1,37 @@
-# harbor-values.yaml - LoadBalancer approach with TLS
+# harbor-values.yaml - Ingress-NGINX with network restrictions
 expose:
-  type: loadBalancer
-  loadBalancer:
-    name: harbor
-    IP: ""  # Let MetalLB assign an IP
-    ports:
-      httpPort: 80
-      httpsPort: 443
+  type: ingress
+  ingress:
+    hosts:
+      core: harbor.batk.me
+    className: "nginx"  # Use your ingress-nginx class
     annotations:
-      metallb.universe.tf/allow-shared-ip: harbor
-    sourceRanges: []
-  tls:
-    enabled: true
-    certSource: auto
-    auto:
-      commonName: "core.harbor.batk.me"
+      # Use cert-manager for Let's Encrypt certificates
+      cert-manager.io/cluster-issuer: "letsencrypt-prod"
+
+      # NGINX Ingress specific settings for Harbor
+      nginx.ingress.kubernetes.io/ssl-redirect: "true"
+      nginx.ingress.kubernetes.io/proxy-body-size: "0"
+      nginx.ingress.kubernetes.io/proxy-buffering: "off"
+      nginx.ingress.kubernetes.io/proxy-request-buffering: "off"
+      nginx.ingress.kubernetes.io/proxy-read-timeout: "900"
+      nginx.ingress.kubernetes.io/proxy-send-timeout: "900"
+
+      # Forward real IP to Harbor
+      nginx.ingress.kubernetes.io/use-forwarded-headers: "true"
+
+      # RESTRICT TO LOCAL NETWORK ONLY
+      nginx.ingress.kubernetes.io/whitelist-source-range: "172.16.0.0/12"
+
+    # TLS configuration with cert-manager
+    tls:
+      enabled: true
+      # Use cert-manager generated certificate
+      certSource: secret
+      secretName: harbor-tls
 
 # External URL should match how you'll access it
-externalURL: https://core.harbor.batk.me
+externalURL: https://harbor.batk.me
 
 # Persistence using Longhorn
 persistence:
