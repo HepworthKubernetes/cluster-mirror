@@ -1,0 +1,81 @@
+# longhorn-values.yaml - Comprehensive worker node configuration
+
+# Global node selector for all Longhorn components
+global:
+  nodeSelector:
+    node-role.longhorn.io/worker: "true"
+
+# Default settings including system components
+defaultSettings:
+  defaultReplicaCount: 2
+  autoSalvage: true
+  replicaAutoBalance: "best-effort"
+  storageOverProvisioningPercentage: 100
+  defaultDataLocality: "best-effort"
+  # System components node selector (note the different syntax)
+  systemManagedComponentsNodeSelector: "node-role.longhorn.io/worker:true"
+
+longhornUI:
+  nodeSelector:
+    node-role.longhorn.io/worker: "true"
+
+# Service configuration for load balancer access
+service:
+  ui:
+    type: LoadBalancer
+    loadBalancerIP: "10.0.3.51"
+
+# Longhorn Manager DaemonSet (runs on all worker nodes)
+longhornManager:
+  nodeSelector:
+    node-role.longhorn.io/worker: "true"
+
+# Longhorn Driver Deployer
+longhornDriver:
+  nodeSelector:
+    node-role.longhorn.io/worker: "true"
+
+# Longhorn UI (single replica, can run on any worker)
+longhornUI:
+  nodeSelector:
+    node-role.longhorn.io/worker: "true"
+
+# Instance Manager (handles volume instances)
+instanceManager:
+  nodeSelector:
+    node-role.longhorn.io/worker: "true"
+
+# CSI Driver components
+csi:
+  # Node driver registrar (DaemonSet - runs on all worker nodes)
+  nodeDriverRegistrar:
+    nodeSelector:
+      node-role.longhorn.io/worker: "true"
+  # CSI Controller components (single replicas)
+  provisioner:
+    nodeSelector:
+      node-role.longhorn.io/worker: "true"
+  attacher:
+    nodeSelector:
+      node-role.longhorn.io/worker: "true"
+  resizer:
+    nodeSelector:
+      node-role.longhorn.io/worker: "true"
+  snapshotter:
+    nodeSelector:
+      node-role.longhorn.io/worker: "true"
+
+# Engine Image DaemonSet (critical for volume operations)
+engineImage:
+  nodeSelector:
+    node-role.longhorn.io/worker: "true"
+
+# Share Manager (for RWX volumes)
+longhornShareManager:
+  nodeSelector:
+    node-role.longhorn.io/worker: "true"
+
+# Backing Image Manager
+longhornBackingImageManager:
+  nodeSelector:
+    node-role.longhorn.io/worker: "true"
