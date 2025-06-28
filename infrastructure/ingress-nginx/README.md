@@ -25,5 +25,8 @@ Now for any DNS requests to `batk.me` they will first hit UniFi DNS, then Cloudf
 
 ## Adding Local DNS Entry
 
-To add a local DNS entry, at [https://unifi.ui.com](https://unifi.ui.com) navigate to Settings -> Policy Engine -> DNS
-Add an A record, i.e. `harbor.batk.me` pointing to `10.0.3.52` (the nginx ingress IP)
+To add a local DNS entry for the home:
+
+1. LOG into [https://unifi.ui.com](https://unifi.ui.com)
+2. Navigate to Settings -> Policy Engine -> DNS
+3. Add an A record pointing to `10.0.3.52`, i.e. `harbor.batk.me` points to `10.0.3.52` (the nginx ingress IP)
