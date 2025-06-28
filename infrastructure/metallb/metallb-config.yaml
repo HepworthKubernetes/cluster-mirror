@@ -6,7 +6,7 @@ metadata:
   namespace: metallb-system
 spec:
   addresses:
-    - 10.0.3.200-10.0.3.220  # Adjust to an unused range on your home LAN
+    - 10.0.3.50-10.0.3.254  # Adjust to an unused range on your home LAN
 ---
 apiVersion: metallb.io/v1beta1
 kind: L2Advertisement
