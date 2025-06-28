@@ -16,6 +16,13 @@ controller:
     rate-limit-rpm: "1200"
     rate-limit-connections: "20"
 
+    # Global CORS configuration
+    enable-cors: "true"
+    cors-allow-origin: "https://code.batk.me"
+    cors-allow-methods: "GET, POST, PUT, DELETE, OPTIONS"
+    cors-allow-headers: "Origin, X-Requested-With, Content-Type, Accept, Authorization"
+    cors-allow-credentials: "true"
+
     # Custom nginx config for more granular control
     http-snippet: |
       # Define rate limit zones
