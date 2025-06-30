@@ -1,0 +1,142 @@
+# argocd-values.yaml - Ingress-NGINX
+global:
+  domain: argocd.batk.me
+
+server:
+  # Ingress configuration
+  ingress:
+    enabled: true
+    ingressClassName: "nginx"
+    hosts:
+      - argocd.batk.me
+    annotations:
+      # Use cert-manager for Let's Encrypt certificates
+      cert-manager.io/cluster-issuer: "letsencrypt-prod"
+
+      # NGINX Ingress specific settings for ArgoCD
+      nginx.ingress.kubernetes.io/ssl-redirect: "true"
+      nginx.ingress.kubernetes.io/backend-protocol: "HTTP"
+      nginx.ingress.kubernetes.io/proxy-read-timeout: "900"
+      nginx.ingress.kubernetes.io/proxy-send-timeout: "900"
+
+      # Forward real IP to ArgoCD
+      nginx.ingress.kubernetes.io/use-forwarded-headers: "true"
+
+    # TLS configuration with cert-manager
+    tls:
+      - secretName: argocd-server-tls
+        hosts:
+          - argocd.batk.me
+
+  # Server configuration
+  config:
+    # Allow insecure connections behind ingress
+    server.insecure: true
+    # Repository server timeout
+    repository.timeout: 120s
+    # Optional: Configure OIDC or other auth methods here
+
+# Resource limits
+  resources:
+    limits:
+      cpu: 500m
+      memory: 512Mi
+    requests:
+      cpu: 250m
+      memory: 256Mi
+
+# Controller configuration
+controller:
+  replicas: 1
+  resources:
+    limits:
+      cpu: 1000m
+      memory: 1Gi
+    requests:
+      cpu: 500m
+      memory: 512Mi
+
+# Repository Server configuration
+repoServer:
+  replicas: 1
+  resources:
+    limits:
+      cpu: 500m
+      memory: 512Mi
+    requests:
+      cpu: 250m
+      memory: 256Mi
+
+# ApplicationSet Controller
+applicationSet:
+  enabled: true
+  replicas: 1
+  resources:
+    limits:
+      cpu: 200m
+      memory: 256Mi
+    requests:
+      cpu: 100m
+      memory: 128Mi
+
+# Notifications Controller
+notifications:
+  enabled: true
+  resources:
+    limits:
+      cpu: 200m
+      memory: 256Mi
+    requests:
+      cpu: 100m
+      memory: 128Mi
+
+# Dex (OIDC provider) - disabled by default
+dex:
+  enabled: false
+
+# Persistence configuration using Longhorn
+persistence:
+  enabled: true
+  storageClass: "longhorn"
+  size: 10Gi
+  accessMode: ReadWriteOnce
+
+# Configuration for RBAC
+configs:
+  # Repository credentials and configurations
+  repositories: {}
+
+  # Cluster configurations
+  clusters: {}
+
+  # RBAC configuration
+  rbac:
+    # Default policy for authenticated users
+    policy.default: role:readonly
+    # Custom policies can be added here
+    policy.csv: |
+      p, role:admin, applications, *, */*, allow
+      p, role:admin, clusters, *, *, allow
+      p, role:admin, repositories, *, *, allow
+      g, argocd-admins, role:admin
+
+# Parameters
+  params:
+    # Disable TLS for server (nginx handles it)
+    server.insecure: true
+    # Increase timeout for large repositories
+    server.repo.server.timeout.seconds: 120
+    # Application operation timeout
+    application.operation.timeout: 300s
+
+# Metrics configuration
+metrics:
+  enabled: true
+  service:
+    annotations:
+      prometheus.io/scrape: "true"
+      prometheus.io/port: "8082"
+      prometheus.io/path: "/metrics"
+
+# Use existing secrets for initial admin credentials
+# Note: ArgoCD will auto-generate admin password if not specified
