@@ -10,9 +10,6 @@ server:
     hosts:
       - argocd.batk.me
     annotations:
-      # Use cert-manager for Let's Encrypt certificates
-      cert-manager.io/cluster-issuer: "letsencrypt-prod"
-
       # NGINX Ingress specific settings for ArgoCD
       nginx.ingress.kubernetes.io/ssl-redirect: "true"
       nginx.ingress.kubernetes.io/backend-protocol: "HTTP"
