@@ -16,4 +16,9 @@ helm upgrade --install cert-manager \
 
 # start cluster issuer
 kubectl apply -k infrascructure/cert-manager/cluster-issuers
+
+# Create cloudflare secret for dns01 challenge
+kubectl create secret generic cloudflare-api-token-secret \
+  --namespace cert-manager \
+  --from-literal=api-token=<YOUR_CLOUDFLARE_API_TOKEN>
 ```
