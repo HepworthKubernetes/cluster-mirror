@@ -1,14 +1,11 @@
 # argocd-values.yaml - Ingress-NGINX
-global:
-  domain: argocd.batk.me
 
 server:
   # Ingress configuration
   ingress:
     enabled: true
     ingressClassName: "nginx"
-    hosts:
-      - argocd.batk.me
+    hostname: argocd.batk.me
     annotations:
       # NGINX Ingress specific settings for ArgoCD
       nginx.ingress.kubernetes.io/ssl-redirect: "true"
@@ -20,20 +17,13 @@ server:
       nginx.ingress.kubernetes.io/use-forwarded-headers: "true"
 
     # TLS configuration with cert-manager
-    tls:
+    tls: true
+    extraTls:
       - secretName: argocd-server-tls
         hosts:
           - argocd.batk.me
 
-  # Server configuration
-  config:
-    # Allow insecure connections behind ingress
-    server.insecure: true
-    # Repository server timeout
-    repository.timeout: 120s
-    # Optional: Configure OIDC or other auth methods here
-
-# Resource limits
+  # Resource limits
   resources:
     limits:
       cpu: 500m
@@ -91,14 +81,6 @@ notifications:
 dex:
   enabled: false
 
-# Persistence configuration using Longhorn
-persistence:
-  enabled: true
-  storageClass: "longhorn"
-  size: 10Gi
-  accessMode: ReadWriteOnce
-
-# Configuration for RBAC
 configs:
   # Repository credentials and configurations
   repositories: {}
@@ -117,7 +99,7 @@ configs:
       p, role:admin, repositories, *, *, allow
       g, argocd-admins, role:admin
 
-# Parameters
+  # Parameters
   params:
     # Disable TLS for server (nginx handles it)
     server.insecure: true
@@ -134,6 +116,18 @@ metrics:
       prometheus.io/scrape: "true"
       prometheus.io/port: "8082"
       prometheus.io/path: "/metrics"
+
+# Redis configuration
+redis:
+  enabled: true
+  networkPolicy:
+    create: false
+  auth:
+    enabled: true
+  persistence:
+    enabled: true
+    storageClass: longhorn
+    size: 10Gi
 
 # Use existing secrets for initial admin credentials
 # Note: ArgoCD will auto-generate admin password if not specified
