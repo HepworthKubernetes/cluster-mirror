@@ -1,4 +1,6 @@
 # prometheus-values.yaml
+crds:
+  enabled: true
 kube-state-metrics:
   enabled: true
 

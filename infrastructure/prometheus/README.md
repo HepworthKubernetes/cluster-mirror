@@ -17,5 +17,5 @@ helm repo add prometheus-community https://prometheus-community.github.io/helm-c
 helm repo update
 helm upgrade --install prometheus prometheus-community/kube-prometheus-stack \
   --namespace prometheus \
-  --values prometheus-values.yaml
+  --values infrastructure/prometheus/prometheus-values.yaml
 ```
