@@ -4,4 +4,4 @@ kind: Kustomization
 namespace: keycloak  # rbac inherits this
 resources:
   - namespace.yaml
-  # - rbac
+  - rbac

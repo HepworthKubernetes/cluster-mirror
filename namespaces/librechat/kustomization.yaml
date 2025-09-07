@@ -4,4 +4,4 @@ kind: Kustomization
 namespace: librechat  # rbac inherits this
 resources:
   - namespace.yaml
-  # - rbac
+  - rbac

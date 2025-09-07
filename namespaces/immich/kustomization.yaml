@@ -4,4 +4,4 @@ kind: Kustomization
 namespace: immich  # rbac inherits this
 resources:
   - namespace.yaml
-  # - rbac
+  - rbac

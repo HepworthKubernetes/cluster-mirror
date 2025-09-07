@@ -4,4 +4,4 @@ kind: Kustomization
 namespace: radicale  # rbac inherits this
 resources:
   - namespace.yaml
-  # - rbac
+  - rbac

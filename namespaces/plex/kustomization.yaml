@@ -4,4 +4,4 @@ kind: Kustomization
 namespace: plex  # rbac inherits this
 resources:
   - namespace.yaml
-  # - rbac
+  - rbac

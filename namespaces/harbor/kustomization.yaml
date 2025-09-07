@@ -4,4 +4,4 @@ kind: Kustomization
 namespace: harbor  # rbac inherits this
 resources:
   - namespace.yaml
-  # - rbac
+  - rbac
