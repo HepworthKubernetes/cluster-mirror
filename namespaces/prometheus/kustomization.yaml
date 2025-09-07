@@ -4,4 +4,4 @@ kind: Kustomization
 namespace: prometheus  # rbac inherits this
 resources:
   - namespace.yaml
-  # - rbac
+  - rbac

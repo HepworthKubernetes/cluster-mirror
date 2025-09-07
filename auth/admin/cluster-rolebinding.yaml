@@ -1,0 +1,86 @@
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: standard-cluster-admin
+  labels:
+    app: standard-cluster-admin
+rules:
+  - apiGroups: [""]
+    resources:
+      - nodes
+      - namespaces
+      - persistentvolumes
+    verbs: ["get", "list", "watch"]
+
+  - apiGroups: [""]
+    resources:
+      - nodes/metrics
+      - nodes/proxy
+      - nodes/stats
+    verbs: ["get", "list"]
+
+  - apiGroups: ["storage.k8s.io"]
+    resources:
+      - storageclasses
+      - csinodes
+      - csidrivers
+      - volumeattachments
+    verbs: ["get", "list", "watch", "create"]
+
+  - apiGroups: ["rbac.authorization.k8s.io"]
+    resources:
+      - clusterroles
+      - clusterrolebindings
+    verbs: ["get", "list", "watch"]
+
+  - apiGroups: ["metrics.k8s.io"]
+    resources:
+      - pods
+      - nodes
+    verbs: ["get", "list"]
+
+  - apiGroups: [""]
+    resources:
+      - apiservices
+    verbs: ["get", "list", "watch"]
+
+  - apiGroups: ["apiextensions.k8s.io"]
+    resources:
+      - customresourcedefinitions
+    verbs: ["get", "list", "watch"]
+
+  - apiGroups: ["certificates.k8s.io"]
+    resources:
+      - certificatesigningrequests
+    verbs: ["get", "list", "watch"]
+
+  - apiGroups: ["scheduling.k8s.io"]
+    resources:
+      - priorityclasses
+    verbs: ["get", "list", "watch"]
+
+  - apiGroups: ["networking.k8s.io"]
+    resources:
+      - ingressclasses
+    verbs: ["get", "list", "watch"]
+
+  - apiGroups: ["policy"]
+    resources:
+      - podsecuritypolicies
+    verbs: ["get", "list", "watch"]
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: standard-cluster-admin-binding
+  labels:
+    app: standard-cluster-admin
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: standard-cluster-admin
+subjects:
+  - kind: Group
+    name: admin

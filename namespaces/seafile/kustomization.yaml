@@ -4,4 +4,4 @@ kind: Kustomization
 namespace: seafile
 resources:
   - namespace.yaml
-  # - rbac
+  - rbac
