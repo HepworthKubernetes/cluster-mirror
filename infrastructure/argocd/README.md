@@ -42,6 +42,16 @@ Then if it looks good, run the upgrade:
 
 ## Checking Current Version
 
+Run this script to check both the currently deployed and latest release from argocd:
+
+```
+./check-argocd-version.sh
+```
+
+## Individual Commands
+
+If you want to manually check the versions, you can run these commands (the above script does these also)
+
 Helm release (chart + app version):
 
 ```bash
