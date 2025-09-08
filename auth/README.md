@@ -17,7 +17,7 @@ kubectl krew install oidc-login
 Copy the kubeconfig to your machine and login
 ```bash
 cp <path-to-repo>/auth/config ~/.kube/config
-kubectl config use-context oidc
+kubectl config use-context default
 kubectl get-pods # logs you in
 ```
 
