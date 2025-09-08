@@ -5,11 +5,23 @@
     /admin
     /developer
 
-
 ### Logging in:
 
-Login the easy way by downloading the kubeconfig in this directory!
+To login, first install [krew](https://krew.sigs.k8s.io/docs/user-guide/setup/install) with you desired method
 
+Then, install the oidc-login plugin:
+```bash
+kubectl krew install oidc-login
+```
+
+Copy the kubeconfig to your machine and login
+```bash
+cp <path-to-repo>/auth/config ~/.kube/config
+kubectl config use-context oidc
+kubectl get-pods # logs you in
+```
+
+### Manual Setup
 ```bash
 kubectl oidc-login setup --oidc-issuer-url=https://auth.batk.me/realms/master --oidc-client-id=kubernetes --listen-address=localhost:18000 --oidc-client-secret=lsYqNBPUvSeR4xJYgAlY41kSgJlM1bvF
 ```
