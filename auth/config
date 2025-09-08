@@ -1,0 +1,31 @@
+apiVersion: v1
+clusters:
+- cluster:
+    certificate-authority-data: LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSUJkekNDQVIyZ0F3SUJBZ0lCQURBS0JnZ3Foa2pPUFFRREFqQWpNU0V3SHdZRFZRUUREQmhyTTNNdGMyVnkKZG1WeUxXTmhRREUzTlRFd01ERTNOamt3SGhjTk1qVXdOakkzTURVeU1qUTVXaGNOTXpVd05qSTFNRFV5TWpRNQpXakFqTVNFd0h3WURWUVFEREJock0zTXRjMlZ5ZG1WeUxXTmhRREUzTlRFd01ERTNOamt3V1RBVEJnY3Foa2pPClBRSUJCZ2dxaGtqT1BRTUJCd05DQUFTT1BUVERKME5HKzdQMTBzeU05WEJKTkVsV3dtR2trU0xjMmdTTEVBalcKeVNSMDBISkpzZlZEOFJXV24vOW9wbEdJRE40dFlDZlh6WWRMTzNlVlRXRi9vMEl3UURBT0JnTlZIUThCQWY4RQpCQU1DQXFRd0R3WURWUjBUQVFIL0JBVXdBd0VCL3pBZEJnTlZIUTRFRmdRVTlwY25VNEtNanQrZEZDdDB1YnBmCjFEczBaNFV3Q2dZSUtvWkl6ajBFQXdJRFNBQXdSUUlnS3hXS085WmptbDI5SXNVYUxIdC9IN01YY0I0MHF2SFUKeEh3bys5QkllaVFDSVFDRFhYSy9NVVIxRWdDNjhDNk1ocnBtcmtKZThKNE5DQUhGM3dINnBLUHZXUT09Ci0tLS0tRU5EIENFUlRJRklDQVRFLS0tLS0K
+    server: https://10.0.3.10:6443
+  name: k8s
+contexts:
+- context:
+    cluster: k8s
+    namespace: default
+    user: oidc
+  name: default
+current-context: default
+kind: Config
+preferences: {}
+users:
+- name: oidc
+  user:
+    exec:
+      apiVersion: client.authentication.k8s.io/v1
+      args:
+      - oidc-login
+      - get-token
+      - --oidc-issuer-url=https://auth.batk.me/realms/master
+      - --oidc-client-id=kubernetes
+      - --oidc-client-secret=lsYqNBPUvSeR4xJYgAlY41kSgJlM1bvF
+      - --listen-address=localhost:18000
+      command: kubectl
+      env: null
+      interactiveMode: Never
+      provideClusterInfo: false

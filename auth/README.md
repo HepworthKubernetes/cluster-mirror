@@ -8,12 +8,14 @@
 
 ### Logging in:
 
+Login the easy way by downloading the kubeconfig in this directory!
+
 ```bash
 kubectl oidc-login setup --oidc-issuer-url=https://auth.batk.me/realms/master --oidc-client-id=kubernetes --listen-address=localhost:18000 --oidc-client-secret=lsYqNBPUvSeR4xJYgAlY41kSgJlM1bvF
 ```
 
 After OIDC login, run:
 ```bash
-kubectl config set-cluster kubernetes --server=https://10.0.3.10:6443
+kubectl config set-cluster kubernetes --server=https://10.0.3.10:6443 --certificate-authority=./ca.crt
 ```
 
