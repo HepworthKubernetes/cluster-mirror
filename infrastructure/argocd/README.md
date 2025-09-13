@@ -26,6 +26,14 @@ This script:
 kubectl get secret argocd-initial-admin-secret -n argocd -o jsonpath='{.data.password}' | base64 -d
 ```
 
+## Checking Current Version
+
+Run this script to check both the currently deployed and latest release from argocd:
+
+```
+./check-argocd-version.sh
+```
+
 ## Upgrades
 
 Always update the repo and do a dry run before applying:
@@ -40,15 +48,7 @@ Then if it looks good, run the upgrade:
 ./upgrade-argocd.sh
 ```
 
-## Checking Current Version
-
-Run this script to check both the currently deployed and latest release from argocd:
-
-```
-./check-argocd-version.sh
-```
-
-## Individual Commands
+## Individual Commands - **optional**
 
 If you want to manually check the versions, you can run these commands (the above script does these also)
 
