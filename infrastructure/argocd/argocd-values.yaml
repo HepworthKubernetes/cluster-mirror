@@ -5,8 +5,9 @@ server:
   ingress:
     enabled: true
     ingressClassName: "nginx"
-    hostname: argocd.batk.me
+    hostname: "argocd.batk.me"
     annotations:
+      cert-manager.io/cluster-issuer: letsencrypt-prod
       # NGINX Ingress specific settings for ArgoCD
       nginx.ingress.kubernetes.io/ssl-redirect: "true"
       nginx.ingress.kubernetes.io/backend-protocol: "HTTP"
@@ -18,10 +19,6 @@ server:
 
     # TLS configuration with cert-manager
     tls: true
-    extraTls:
-      - secretName: argocd-server-tls
-        hosts:
-          - argocd.batk.me
 
   # Resource limits
   resources:
