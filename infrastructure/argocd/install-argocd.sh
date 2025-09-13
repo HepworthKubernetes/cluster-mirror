@@ -10,7 +10,7 @@ echo "==> Adding/updating Helm repo"
 helm repo add argo https://argoproj.github.io/argo-helm >/dev/null 2>&1 || true
 helm repo update
 
-echo "==> Installing Argo CD $CHART_VERSION into namespace $NAMESPACE"
+echo "==> Installing Argo CD into namespace $NAMESPACE"
 helm upgrade --install argocd "$CHART" \
   --namespace "$NAMESPACE" \
   --create-namespace \
