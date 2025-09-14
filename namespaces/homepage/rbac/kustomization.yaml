@@ -4,4 +4,4 @@ kind: Kustomization
 resources:
   - ../../../auth/admin
   - ../../../rbac/forgejo-runner-sa
-  - forgejo-backup-sa
+  - homepage-sa

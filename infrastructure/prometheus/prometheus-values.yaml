@@ -30,8 +30,26 @@ prometheus:
 
 grafana:
   enabled: true
+  grafana.ini:
+    rendering:
+      root_url: https://grafana.batk.me/
+      domain: grafana.batk.me
+
+  ingress:
+    ingressClassName: nginx
+    enabled: true
+    annotations: {
+      cert-manager.io/cluster-issuer: "letsencrypt-prod",
+      nginx.ingress.kubernetes.io/rewrite-target: /,
+      nginx.ingress.kubernetes.io/ssl-redirect: 'true'
+    }
+    hosts:
+      - grafana.batk.me
+    tls:
+      - secretName: grafana-tls
+
   service:
-    type: LoadBalancer
+    type: ClusterIP
   adminPassword: ""
   persistence:
     enabled: true
