@@ -1,9 +1,6 @@
 # Cert Manager
 
 ```bash
-# apply crds and namespace
-kubectl apply -f cert-manager.crds.yaml
-
 # install cert-manager
 helm repo add jetstack https://charts.jetstack.io
 helm repo update
