@@ -17,13 +17,22 @@ This script:
 ./install-argocd.sh
 ```
 
-## Access
+### Access
+
 - URL: https://argocd.batk.me
 - Username: `admin`
-- Password: Get with
+- Password: Get by running this command:
 
 ```bash
 kubectl get secret argocd-initial-admin-secret -n argocd -o jsonpath='{.data.password}' | base64 -d
+```
+
+### Remove initial admin password
+
+The initial admin password is stored in plain text in the `argocd-initial-admin-secret` secret. After the first time install, test logging in with admin and the initial password. Save the password, then delete the secret by running this command:
+
+```bash
+kubectl -n argocd delete secret argocd-initial-admin-secret
 ```
 
 ## Checking Current Version
